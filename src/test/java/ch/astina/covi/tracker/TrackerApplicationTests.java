@@ -21,7 +21,7 @@ class TrackerApplicationTests
     private MockMvc mockMvc;
 
     @Autowired
-	private JdbcTemplate db;
+    private JdbcTemplate db;
 
     @Test
     void contextLoads()
@@ -31,32 +31,27 @@ class TrackerApplicationTests
     @Test
     void saveSubmission() throws Exception
     {
-    	db.execute("create table COVID_SUBMISSION\n" +
-				"      (\n" +
-				"      \tid bigint auto_increment,\n" +
-				"      \tage int null,\n" +
-				"      \tcreated datetime default current_timestamp() null,\n" +
-				"      \tconstraint COVID_SUBMISSION_pk\n" +
-				"      \t\tprimary key (id)\n" +
-				"      )");
-
         mockMvc.perform(post("/save")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("" +
-						"{\n" +
-						"\t\"isMale\": true,\n" +
-						"\t\"age\": 25,\n" +
-						"\t\"zip\": 8004,\n" +
-						"\t\"hasBeenTested\": false,\n" +
-						"\t\"dateTested\": \"\",\n" +
-						"\t\"worksInHealth\": false,\n" +
-						"\t\"travelled\": false,\n" +
-						"\t\"chronicalDisease\": false,\n" +
-						"\t\"fever\": false,\n" +
-						"\t\"coughing\": false,\n" +
-						"\t\"dyspnea\": false,\n" +
-						"\t\"phoneDigits\": \"0009\"\n" +
-						"}"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "\t\"sex\": \"female\",\n" +
+                        "\t\"age\": 26,\n" +
+                        "\t\"zip\": \"8708\",\n" +
+                        "\t\"phoneDigits\": \"9404\",\n" +
+                        "\t\"feelsHealthy\": false,\n" +
+                        "\t\"hasBeenTested\": true,\n" +
+                        "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
+                        "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"worksInHealth\": \"no\",\n" +
+                        "\t\"wasAbroad\": \"italy\",\n" +
+                        "\t\"wasInContactWithCase\": \"2020-03-10\",\n" +
+                        "\t\"chronicCondition\": \"none\",\n" +
+                        "\t\"fever\": null,\n" +
+                        "\t\"coughing\": 3,\n" +
+                        "\t\"dyspnea\": null,\n" +
+                        "\t\"tiredness\": null,\n" +
+                        "\t\"throat\": null\n" +
+                        "}"))
                 .andExpect(status().isAccepted());
     }
 }

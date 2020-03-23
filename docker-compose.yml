@@ -4,6 +4,6 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: db
       POSTGRES_PASSWORD: db
-      POSTGRES_DB: covi
+    ports:
+      - "5432:5432"
