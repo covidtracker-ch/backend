@@ -122,6 +122,7 @@ public class FormController
         params.addValue("feels_healthy", data.feelsHealthy);
         params.addValue("has_been_tested", data.hasBeenTested);
         params.addValue("where_tested", data.whereTested);
+        params.addValue("when_tested", data.whenTested);
         params.addValue("works_in_health", data.worksInHealth);
         params.addValue("was_abroad", data.wasAbroad);
         params.addValue("was_in_contact_with_case", data.wasInContactWithCase ? data.dateContacted : null);
@@ -133,10 +134,10 @@ public class FormController
         params.addValue("symptom_throat", data.throat ? data.throatSince : null);
 
         db.update("insert into covid_submission (" +
-                        "sex, age, zip, phone_digits, feels_healthy, has_been_tested, where_tested, " +
+                        "sex, age, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, " +
                         "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
                         "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat) values (" +
-                        ":sex, :age, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, " +
+                        ":sex, :age, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, " +
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat)",
                 params);

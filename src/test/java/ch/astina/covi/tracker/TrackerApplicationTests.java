@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,6 +62,7 @@ class TrackerApplicationTests
 
             assertEquals("female", rs.getString("sex"));
             assertEquals(38, rs.getInt("age"));
+            assertEquals(LocalDate.of(2020, 3, 23), rs.getObject("when_tested", LocalDate.class));
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertEquals(3, rs.getInt("symptom_coughing"));
             assertNotNull(rs.getDate("_created"));
