@@ -1,6 +1,10 @@
 package ch.astina.covi.tracker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,12 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.net.URI;
 import java.sql.Types;
 import java.time.LocalDate;
 
 @RestController
 public class FormController
 {
+    private static final URI FORM_REDIRECT_URL_ERROR = URI.create("https://covidtracker.ch/?error=true");
+
+    private static final URI FORM_REDIRECT_URL_SUCCESS = URI.create("https://covidtracker.ch/response.html");
+
+    private final static Logger log = LoggerFactory.getLogger(FormController.class);
+
     private final NamedParameterJdbcTemplate db;
 
     public FormController(NamedParameterJdbcTemplate db)
@@ -73,10 +84,18 @@ public class FormController
                 throat,
                 throatSince
         );
+        try {
 
-        saveSubmission(data);
+            saveSubmission(data);
 
-        return ResponseEntity.accepted().build();
+            return redirect(FORM_REDIRECT_URL_SUCCESS);
+
+        } catch (Exception e) {
+
+            log.error("Error saving form submission", e);
+
+            return redirect(FORM_REDIRECT_URL_ERROR);
+        }
     }
 
     @CrossOrigin(origins = "*", methods = RequestMethod.POST)
@@ -121,5 +140,16 @@ public class FormController
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat)",
                 params);
+    }
+
+    private ResponseEntity<Void> redirect(URI formRedirectUrlSuccess)
+    {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(formRedirectUrlSuccess);
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .headers(httpHeaders)
+                .build();
     }
 }
