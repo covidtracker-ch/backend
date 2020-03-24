@@ -31,3 +31,12 @@ docker push eu.gcr.io/astina-474925/covi-tracker:[VERSION]
 
 Set image version in https://github.com/astina/covi-config/blob/master/deployment.yaml#L20
 and push.
+
+
+## Database
+
+**Connect to database**
+
+```
+kubectl port-forward -n sql-proxy svc/access-db-prod 5432
+```
