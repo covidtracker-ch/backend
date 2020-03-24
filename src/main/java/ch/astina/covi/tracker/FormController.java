@@ -1,11 +1,8 @@
 package ch.astina.covi.tracker;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,13 +38,13 @@ public class FormController
         params.addValue("where_tested", data.whereTested);
         params.addValue("works_in_health", data.worksInHealth);
         params.addValue("was_abroad", data.wasAbroad);
-        params.addValue("was_in_contact_with_case", data.wasInContactWithCase);
-        params.addValue("chronic_condition", data.chronicCondition);
-        params.addValue("symptom_fever", data.fever);
-        params.addValue("symptom_coughing", data.coughing);
-        params.addValue("symptom_dyspnea", data.dyspnea);
-        params.addValue("symptom_tiredness", data.tiredness);
-        params.addValue("symptom_throat", data.throat);
+        params.addValue("was_in_contact_with_case", data.dateContacted);
+        params.addValue("chronic_condition", data.chronicConditionType);
+        params.addValue("symptom_fever", data.feverSince);
+        params.addValue("symptom_coughing", data.coughingSince);
+        params.addValue("symptom_dyspnea", data.dyspneaSince);
+        params.addValue("symptom_tiredness", data.tirednessSince);
+        params.addValue("symptom_throat", data.throatSince);
 
         db.update("insert into covid_submission (" +
                         "sex, age, zip, phone_digits, feels_healthy, has_been_tested, where_tested, " +

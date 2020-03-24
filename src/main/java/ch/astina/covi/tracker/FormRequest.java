@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,10 +32,10 @@ public class FormRequest
 
     public final Boolean hasBeenTested;
 
+    public final LocalDate whenTested;
+
     @Size(max = 30)
     public final String whereTested;
-
-    public final LocalDate whenTested;
 
     @NotNull
     public final WorksInHealth worksInHealth;
@@ -44,20 +43,33 @@ public class FormRequest
     @NotNull
     public final WasAbroad wasAbroad;
 
-    public final LocalDate wasInContactWithCase;
+    @NotNull
+    public final Boolean wasInContactWithCase;
+
+    public final LocalDate dateContacted;
 
     @NotNull
-    public final ChronicCondition chronicCondition;
+    public final ChronicCondition chronicConditionType;
 
-    public final Integer fever;
+    public final Boolean fever;
 
-    public final Integer coughing;
+    public final Integer feverSince;
 
-    public final Integer dyspnea;
+    public final Boolean coughing;
 
-    public final Integer tiredness;
+    public final Integer coughingSince;
 
-    public final Integer throat;
+    public final Boolean dyspnea;
+
+    public final Integer dyspneaSince;
+
+    public final Boolean tiredness;
+
+    public final Integer tirednessSince;
+
+    public final Boolean throat;
+
+    public final Integer throatSince;
 
     @JsonCreator
     public FormRequest(@JsonProperty("sex") @NotNull Gender sex,
@@ -66,17 +78,23 @@ public class FormRequest
                        @JsonProperty("phoneDigits") @Size(max = 4) String phoneDigits,
                        @JsonProperty("feelsHealthy") Boolean feelsHealthy,
                        @JsonProperty("hasBeenTested") Boolean hasBeenTested,
-                       @JsonProperty("whereTested") String whereTested,
                        @JsonProperty("whenTested") LocalDate whenTested,
+                       @JsonProperty("whereTested") String whereTested,
                        @JsonProperty("worksInHealth") WorksInHealth worksInHealth,
                        @JsonProperty("wasAbroad") WasAbroad wasAbroad,
-                       @JsonProperty("wasInContactWithCase") LocalDate wasInContactWithCase,
-                       @JsonProperty("chronicCondition") ChronicCondition chronicCondition,
-                       @JsonProperty("fever") Integer fever,
-                       @JsonProperty("coughing") Integer coughing,
-                       @JsonProperty("dyspnea") Integer dyspnea,
-                       @JsonProperty("tiredness") Integer tiredness,
-                       @JsonProperty("throat") Integer throat)
+                       @JsonProperty("wasInContactWithCase") Boolean wasInContactWithCase,
+                       @JsonProperty("dateContacted") LocalDate dateContacted,
+                       @JsonProperty("chronicConditionType") ChronicCondition chronicConditionType,
+                       @JsonProperty("fever") Boolean fever,
+                       @JsonProperty("feverSince") Integer feverSince,
+                       @JsonProperty("coughing") Boolean coughing,
+                       @JsonProperty("coughingSince") Integer coughingSince,
+                       @JsonProperty("dyspnea") Boolean dyspnea,
+                       @JsonProperty("dyspneaSince") Integer dyspneaSince,
+                       @JsonProperty("tiredness") Boolean tiredness,
+                       @JsonProperty("tirednessSince") Integer tirednessSince,
+                       @JsonProperty("throat") Boolean throat,
+                       @JsonProperty("throatSince") Integer throatSince)
     {
         this.sex = sex;
         this.age = age;
@@ -89,12 +107,18 @@ public class FormRequest
         this.worksInHealth = worksInHealth;
         this.wasAbroad = wasAbroad;
         this.wasInContactWithCase = wasInContactWithCase;
-        this.chronicCondition = chronicCondition;
+        this.dateContacted = dateContacted;
+        this.chronicConditionType = chronicConditionType;
         this.fever = fever;
+        this.feverSince = feverSince;
         this.coughing = coughing;
+        this.coughingSince = coughingSince;
         this.dyspnea = dyspnea;
+        this.dyspneaSince = dyspneaSince;
         this.tiredness = tiredness;
+        this.tirednessSince = tirednessSince;
         this.throat = throat;
+        this.throatSince = throatSince;
     }
 
     public enum Gender
@@ -125,7 +149,7 @@ public class FormRequest
 
     public enum ChronicCondition
     {
-        none,
+        no,
         heart,
         lung,
         diabetes,
