@@ -36,7 +36,7 @@ public class FormController
     @CrossOrigin(origins = "*", methods = RequestMethod.POST)
     @PostMapping("/form")
     public ResponseEntity<Void> form(@RequestParam("sex") FormRequest.Gender sex,
-                                     @RequestParam("age") @Min(0) Integer age,
+                                     @RequestParam("yearOfBirth") @Min(1900) Integer yearOfBirth,
                                      @RequestParam("zip") @Size(min = 4, max = 4) String zip,
                                      @RequestParam(value = "phoneDigits", required = false) @Size(min = 4, max = 4) String phoneDigits,
                                      @RequestParam(value = "feelsHealthy", required = false) Boolean feelsHealthy,
@@ -61,7 +61,7 @@ public class FormController
     {
         FormRequest data = new FormRequest(
                 sex,
-                age,
+                yearOfBirth,
                 zip,
                 phoneDigits,
                 feelsHealthy,
@@ -116,7 +116,7 @@ public class FormController
         params.registerSqlType("chronic_condition", Types.VARCHAR);
 
         params.addValue("sex", data.sex);
-        params.addValue("age", data.age);
+        params.addValue("year_of_birth", data.yearOfBirth);
         params.addValue("zip", data.zip);
         params.addValue("phone_digits", data.phoneDigits);
         params.addValue("feels_healthy", data.feelsHealthy);
@@ -134,10 +134,10 @@ public class FormController
         params.addValue("symptom_throat", data.throat ? data.throatSince : null);
 
         db.update("insert into covid_submission (" +
-                        "sex, age, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, " +
+                        "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, " +
                         "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
                         "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat) values (" +
-                        ":sex, :age, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, " +
+                        ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, " +
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat)",
                 params);

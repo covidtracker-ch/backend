@@ -4,7 +4,7 @@ create table covid_submission
         constraint covid_submission_pk
             primary key,
     sex                      varchar(10) not null,
-    age                      int         not null,
+    year_of_birth            int         not null,
     zip                      varchar(4)  not null,
     phone_digits             varchar(4),
     feels_healthy            bool        not null,

@@ -38,7 +38,7 @@ class TrackerApplicationTests
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "\t\"sex\": \"female\",\n" +
-                        "\t\"age\": 38,\n" +
+                        "\t\"yearOfBirth\": 1960,\n" +
                         "\t\"zip\": \"8708\",\n" +
                         "\t\"phoneDigits\": \"9404\",\n" +
                         "\t\"feelsHealthy\": 1,\n" +
@@ -61,7 +61,7 @@ class TrackerApplicationTests
         db.query("select * from covid_submission order by _created desc limit 1", rs -> {
 
             assertEquals("female", rs.getString("sex"));
-            assertEquals(38, rs.getInt("age"));
+            assertEquals(1960, rs.getInt("year_of_birth"));
             assertEquals(LocalDate.of(2020, 3, 23), rs.getObject("when_tested", LocalDate.class));
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertEquals(3, rs.getInt("symptom_coughing"));

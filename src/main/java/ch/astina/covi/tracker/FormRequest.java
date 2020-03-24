@@ -19,8 +19,8 @@ public class FormRequest
     @NotNull
     public final Gender sex;
 
-    @Min(0)
-    public final Integer age;
+    @Min(1900)
+    public final Integer yearOfBirth;
 
     @Size(min = 4, max = 4)
     public final String zip;
@@ -74,9 +74,9 @@ public class FormRequest
 
     @JsonCreator
     public FormRequest(@JsonProperty("sex") @NotNull Gender sex,
-                       @JsonProperty("age") @Min(0) Integer age,
+                       @JsonProperty("yearOfBirth") @Min(1900) Integer yearOfBirth,
                        @JsonProperty("zip") @Size(min = 4, max = 4) String zip,
-                       @JsonProperty("phoneDigits") @Size(max = 4) String phoneDigits,
+                       @JsonProperty("phoneDigits") @Size(min = 4, max = 4) String phoneDigits,
                        @JsonProperty("feelsHealthy") Boolean feelsHealthy,
                        @JsonProperty("hasBeenTested") Boolean hasBeenTested,
                        @JsonProperty("whenTested") LocalDate whenTested,
@@ -98,7 +98,7 @@ public class FormRequest
                        @JsonProperty("throatSince") Integer throatSince)
     {
         this.sex = sex;
-        this.age = age;
+        this.yearOfBirth = yearOfBirth;
         this.zip = zip;
         this.phoneDigits = phoneDigits;
         this.feelsHealthy = feelsHealthy;
