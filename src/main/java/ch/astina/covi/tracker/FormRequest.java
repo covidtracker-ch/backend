@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * See https://gist.github.com/lucnat/6578adccc0b68594df8a1c575a35b46f
@@ -109,15 +110,15 @@ public class FormRequest
         this.wasInContactWithCase = wasInContactWithCase;
         this.dateContacted = dateContacted;
         this.chronicConditionType = chronicConditionType;
-        this.fever = fever;
+        this.fever = Optional.ofNullable(fever).orElse(feverSince != null);
         this.feverSince = feverSince;
-        this.coughing = coughing;
+        this.coughing = Optional.ofNullable(coughing).orElse(coughingSince != null);
         this.coughingSince = coughingSince;
-        this.dyspnea = dyspnea;
+        this.dyspnea = Optional.ofNullable(dyspnea).orElse(dyspneaSince != null);
         this.dyspneaSince = dyspneaSince;
-        this.tiredness = tiredness;
+        this.tiredness = Optional.ofNullable(tiredness).orElse(tirednessSince != null);
         this.tirednessSince = tirednessSince;
-        this.throat = throat;
+        this.throat = Optional.ofNullable(throat).orElse(throatSince != null);
         this.throatSince = throatSince;
     }
 

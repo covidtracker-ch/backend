@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,5 +55,14 @@ class TrackerApplicationTests
                         "\t\"throatSince\": null\n" +
                         "}"))
                 .andExpect(status().isAccepted());
+
+        db.query("select * from covid_submission order by _created desc limit 1", rs -> {
+
+            assertEquals("female", rs.getString("sex"));
+            assertEquals(38, rs.getInt("age"));
+            assertNull(rs.getObject("symptom_fever", Integer.class));
+            assertEquals(3, rs.getInt("symptom_coughing"));
+            assertNotNull(rs.getDate("_created"));
+        });
     }
 }
