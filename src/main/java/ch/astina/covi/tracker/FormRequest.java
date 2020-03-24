@@ -105,11 +105,11 @@ public class FormRequest
         this.hasBeenTested = hasBeenTested;
         this.whereTested = whereTested;
         this.whenTested = whenTested;
-        this.worksInHealth = worksInHealth;
-        this.wasAbroad = wasAbroad;
+        this.worksInHealth = Optional.ofNullable(worksInHealth).orElse(WorksInHealth.no);
+        this.wasAbroad = Optional.ofNullable(wasAbroad).orElse(WasAbroad.no);
         this.wasInContactWithCase = wasInContactWithCase;
         this.dateContacted = dateContacted;
-        this.chronicConditionType = chronicConditionType;
+        this.chronicConditionType = Optional.ofNullable(chronicConditionType).orElse(ChronicCondition.no);
         this.fever = Optional.ofNullable(fever).orElse(feverSince != null);
         this.feverSince = feverSince;
         this.coughing = Optional.ofNullable(coughing).orElse(coughingSince != null);
