@@ -26,7 +26,7 @@ public class FormRequest
     public final String zip;
 
     // Last four digits of phone number
-    @Size(max = 4)
+    @Size(min = 4, max = 4)
     public final String phoneDigits;
 
     public final Boolean feelsHealthy;
