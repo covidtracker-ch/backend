@@ -66,6 +66,7 @@ class TrackerApplicationTests
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertEquals(3, rs.getInt("symptom_coughing"));
             assertNotNull(rs.getDate("_created"));
+            assertEquals("127.0.0._", rs.getString("_ip_addr"));
         });
     }
 }

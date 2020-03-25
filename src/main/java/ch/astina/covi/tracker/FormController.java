@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -20,9 +21,9 @@ import java.time.LocalDate;
 @RestController
 public class FormController
 {
-    private static final URI FORM_REDIRECT_URL_ERROR = URI.create("https://covidtracker.ch/?error=true");
+    private static final URI FORM_REDIRECT_URL_ERROR = URI.create("https://www.covidtracker.ch/?error=true");
 
-    private static final URI FORM_REDIRECT_URL_SUCCESS = URI.create("https://covidtracker.ch/response.html");
+    private static final URI FORM_REDIRECT_URL_SUCCESS = URI.create("https://www.covidtracker.ch/response.html");
 
     private final static Logger log = LoggerFactory.getLogger(FormController.class);
 
@@ -57,7 +58,8 @@ public class FormController
                                      @RequestParam(value = "tiredness", required = false) Boolean tiredness,
                                      @RequestParam(value = "tirednessSince", required = false) Integer tirednessSince,
                                      @RequestParam(value = "throat", required = false) Boolean throat,
-                                     @RequestParam(value = "throatSince", required = false) Integer throatSince)
+                                     @RequestParam(value = "throatSince", required = false) Integer throatSince,
+                                     ServletRequest request)
     {
         FormRequest data = new FormRequest(
                 sex,
@@ -86,7 +88,7 @@ public class FormController
         );
         try {
 
-            saveSubmission(data);
+            saveSubmission(data, request);
 
             return redirect(FORM_REDIRECT_URL_SUCCESS);
 
@@ -100,14 +102,14 @@ public class FormController
 
     @CrossOrigin(origins = "*", methods = RequestMethod.POST)
     @PostMapping(value = "/save")
-    public ResponseEntity<Void> save(@RequestBody @Valid FormRequest data)
+    public ResponseEntity<Void> save(@RequestBody @Valid FormRequest data, ServletRequest request)
     {
-        saveSubmission(data);
+        saveSubmission(data, request);
 
         return ResponseEntity.accepted().build();
     }
 
-    private void saveSubmission(@RequestBody @Valid FormRequest data)
+    private void saveSubmission(@RequestBody @Valid FormRequest data, ServletRequest request)
     {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.registerSqlType("sex", Types.VARCHAR);
@@ -133,13 +135,18 @@ public class FormController
         params.addValue("symptom_tiredness", data.tiredness ? data.tirednessSince : null);
         params.addValue("symptom_throat", data.throat ? data.throatSince : null);
 
+        String ipAnon = Utils.anonymizeIp(request.getRemoteAddr());
+        params.addValue("ip_addr", ipAnon);
+
         db.update("insert into covid_submission (" +
                         "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, " +
                         "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
-                        "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat) values (" +
+                        "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat, " +
+                        "_ip_addr) values (" +
                         ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, " +
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
-                        ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat)",
+                        ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat, " +
+                        ":ip_addr)",
                 params);
     }
 

@@ -20,5 +20,6 @@ create table covid_submission
     symptom_dyspnea          int,
     symptom_tiredness        int,
     symptom_throat           int,
-    _created                 timestamp   not null default current_timestamp
+    _created                 timestamp   not null default current_timestamp,
+    _ip_addr                 varchar(50) not null
 )
