@@ -22,4 +22,7 @@ create table covid_submission
     symptom_throat           int,
     _created                 timestamp   not null default current_timestamp,
     _ip_addr                 varchar(50) not null
-)
+);
+
+create index covid_submission__created
+    on covid_submission (_created);
