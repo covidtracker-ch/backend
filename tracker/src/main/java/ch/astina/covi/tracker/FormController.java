@@ -34,7 +34,7 @@ public class FormController
         this.db = db;
     }
 
-    @CrossOrigin(origins = "*", methods = RequestMethod.POST)
+    @CrossOrigin(origins = "https://www.covidtracker.ch", methods = RequestMethod.POST)
     @PostMapping("/form")
     public ResponseEntity<Void> form(@RequestParam("sex") FormRequest.Gender sex,
                                      @RequestParam("yearOfBirth") @Min(1900) Integer yearOfBirth,

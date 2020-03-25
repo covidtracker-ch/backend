@@ -1,7 +1,7 @@
 COVID-19 Tracker
 ===
 
-## Deployment
+## Build & Deployment
 
 **Create JAR**
   
