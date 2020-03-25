@@ -22,7 +22,7 @@ public class Utils
 
             String result = InetAddresses.toAddrString(InetAddress.getByAddress(address));
             if (address.length == 4) {
-                result = result.replaceFirst("\\.0$", "._");
+                result = result.replaceFirst("\\.0$", ".0");
             }
 
             return result;

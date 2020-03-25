@@ -43,7 +43,7 @@ public class FormController
                                      @RequestParam(value = "feelsHealthy", required = false) Boolean feelsHealthy,
                                      @RequestParam(value = "hasBeenTested", required = false) Boolean hasBeenTested,
                                      @RequestParam(value = "whenTested", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenTested,
-                                     @RequestParam(value = "whereTested", required = false) String whereTested,
+                                     @RequestParam(value = "whereTested", required = false) @Size(max = 255) String whereTested,
                                      @RequestParam(value = "worksInHealth", required = false) FormRequest.WorksInHealth worksInHealth,
                                      @RequestParam(value = "wasAbroad", required = false) FormRequest.WasAbroad wasAbroad,
                                      @RequestParam(value = "wasInContactWithCase", required = false) Boolean wasInContactWithCase,
@@ -148,6 +148,12 @@ public class FormController
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat, " +
                         ":ip_addr)",
                 params);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Void> onError()
+    {
+        return redirect(FORM_REDIRECT_URL_ERROR);
     }
 
     private ResponseEntity<Void> redirect(URI formRedirectUrlSuccess)

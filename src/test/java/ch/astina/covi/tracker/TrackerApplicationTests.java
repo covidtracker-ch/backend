@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -66,7 +67,43 @@ class TrackerApplicationTests
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertEquals(3, rs.getInt("symptom_coughing"));
             assertNotNull(rs.getDate("_created"));
-            assertEquals("127.0.0._", rs.getString("_ip_addr"));
+            assertEquals("127.0.0.0", rs.getString("_ip_addr"));
         });
+    }
+
+    @Test
+    void saveSubmissionByForm() throws Exception
+    {
+        mockMvc.perform(post("/form")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sex", "male")
+                .param("yearOfBirth", "1990")
+                .param("zip", "9000")
+                .param("phoneDigits", "0056")
+                .param("feelsHealthy", "0")
+                .param("hasBeenTested", "0")
+                .param("worksInHealth", "private_practice")
+                .param("wasAbroad", "no")
+                .param("wasInContactWithCase", "0")
+                .param("chronicConditionType", "diabetes"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "https://www.covidtracker.ch/response.html"));
+
+        db.query("select * from covid_submission order by _created desc limit 1", rs -> {
+
+            assertEquals("male", rs.getString("sex"));
+            assertEquals(1990, rs.getInt("year_of_birth"));
+            assertNull(rs.getObject("symptom_fever", Integer.class));
+            assertNotNull(rs.getDate("_created"));
+            assertEquals("127.0.0.0", rs.getString("_ip_addr"));
+        });
+    }
+
+    @Test
+    public void testErrorHandling() throws Exception
+    {
+        mockMvc.perform(post("/form"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "https://www.covidtracker.ch/?error=true"));
     }
 }

@@ -35,7 +35,7 @@ public class FormRequest
 
     public final LocalDate whenTested;
 
-    @Size(max = 30)
+    @Size(max = 255)
     public final String whereTested;
 
     @NotNull
