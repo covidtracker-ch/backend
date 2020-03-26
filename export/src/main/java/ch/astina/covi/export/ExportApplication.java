@@ -20,7 +20,7 @@ public class ExportApplication
         @Override
         public void configure(WebSecurity web)
         {
-            web.ignoring().antMatchers("/count");
+            web.ignoring().antMatchers("/count", "/actuator/**");
         }
     }
 }
