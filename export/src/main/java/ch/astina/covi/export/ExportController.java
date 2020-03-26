@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 public class ExportController
@@ -86,5 +87,17 @@ public class ExportController
         };
 
         return new ResponseEntity<>(stream, HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> count()
+    {
+        AtomicReference<Long> count = new AtomicReference<>();
+
+        db.query("select count(*) from covid_submission", rs -> {
+            count.set(rs.getLong(1));
+        });
+
+        return ResponseEntity.ok(count.get());
     }
 }
