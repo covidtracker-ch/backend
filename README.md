@@ -32,11 +32,21 @@ docker push eu.gcr.io/astina-474925/covi-tracker:[VERSION]
 Set image version in https://github.com/astina/covi-config/blob/master/deployment.yaml#L20
 and push.
 
-
 ## Database
 
 **Connect to database**
 
 ```
 kubectl port-forward -n sql-proxy svc/access-db-prod 5432
+```
+
+## Secrets
+
+*Note*: make sure `--namespace` is correct.
+
+```
+kubectl create secret --namespace=covid-export \
+    --from-literal=foo=bar \
+    --from-literal=baz=kux \
+    generic my-secret
 ```
