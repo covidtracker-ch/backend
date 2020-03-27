@@ -55,7 +55,7 @@ public class ExportController
             db.query(query, params, rs -> {
                 try {
 
-                    String row = String.format("%s,%s,%s,%s,%s,%s,%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\"%s\"\r\n",
+                    String row = String.format("%s,%s,%s,%s,%s,%s,%s,\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\"%s\"\r\n",
                             rs.getString("id"),
                             rs.getString("sex"),
                             rs.getString("year_of_birth"),
