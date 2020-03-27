@@ -12,13 +12,7 @@ mvn clean package
 **Build Docker image**
 
 ```
-docker build -t ch.astina/covi-tracker:[VERSION] --no-cache . 
-```
-
-**Tag Docker image**
-
-```
-docker tag [IMAGE_ID] eu.gcr.io/astina-474925/covi-tracker:[VERSION]
+docker build -t eu.gcr.io/astina-474925/covi-tracker:[VERSION] --no-cache . 
 ```
 
 **Push Docker image**

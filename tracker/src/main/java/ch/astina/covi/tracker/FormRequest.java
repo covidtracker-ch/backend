@@ -38,6 +38,8 @@ public class FormRequest
     @Size(max = 255)
     public final String whereTested;
 
+    public final TestResult testResult;
+
     @NotNull
     public final WorksInHealth worksInHealth;
 
@@ -81,6 +83,7 @@ public class FormRequest
                        @JsonProperty("hasBeenTested") Boolean hasBeenTested,
                        @JsonProperty("whenTested") LocalDate whenTested,
                        @JsonProperty("whereTested") String whereTested,
+                       @JsonProperty("testResult") TestResult testResult,
                        @JsonProperty("worksInHealth") WorksInHealth worksInHealth,
                        @JsonProperty("wasAbroad") WasAbroad wasAbroad,
                        @JsonProperty("wasInContactWithCase") Boolean wasInContactWithCase,
@@ -105,6 +108,7 @@ public class FormRequest
         this.hasBeenTested = hasBeenTested;
         this.whereTested = whereTested;
         this.whenTested = whenTested;
+        this.testResult = testResult;
         this.worksInHealth = Optional.ofNullable(worksInHealth).orElse(WorksInHealth.no);
         this.wasAbroad = Optional.ofNullable(wasAbroad).orElse(WasAbroad.no);
         this.wasInContactWithCase = wasInContactWithCase;
@@ -127,6 +131,12 @@ public class FormRequest
         male,
         female,
         other,
+    }
+
+    public enum TestResult
+    {
+        positive,
+        negative,
     }
 
     public enum WorksInHealth

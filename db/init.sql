@@ -11,6 +11,7 @@ create table covid_submission
     has_been_tested          bool,
     where_tested             varchar(255),
     when_tested              date,
+    test_result              varchar(30),
     works_in_health          varchar(30),
     was_abroad               varchar(30),
     was_in_contact_with_case date,

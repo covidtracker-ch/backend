@@ -44,6 +44,7 @@ public class FormController
                                      @RequestParam(value = "hasBeenTested", required = false) Boolean hasBeenTested,
                                      @RequestParam(value = "whenTested", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenTested,
                                      @RequestParam(value = "whereTested", required = false) @Size(max = 255) String whereTested,
+                                     @RequestParam(value = "testResult", required = false) FormRequest.TestResult testResult,
                                      @RequestParam(value = "worksInHealth", required = false) FormRequest.WorksInHealth worksInHealth,
                                      @RequestParam(value = "wasAbroad", required = false) FormRequest.WasAbroad wasAbroad,
                                      @RequestParam(value = "wasInContactWithCase", required = false) Boolean wasInContactWithCase,
@@ -70,6 +71,7 @@ public class FormController
                 hasBeenTested,
                 whenTested,
                 whereTested,
+                testResult,
                 worksInHealth,
                 wasAbroad,
                 wasInContactWithCase,
@@ -125,6 +127,7 @@ public class FormController
         params.addValue("has_been_tested", data.hasBeenTested);
         params.addValue("where_tested", data.whereTested);
         params.addValue("when_tested", data.whenTested);
+        params.addValue("test_result", data.testResult);
         params.addValue("works_in_health", data.worksInHealth);
         params.addValue("was_abroad", data.wasAbroad);
         params.addValue("was_in_contact_with_case", data.wasInContactWithCase ? data.dateContacted : null);
@@ -139,11 +142,11 @@ public class FormController
         params.addValue("ip_addr", ipAnon);
 
         db.update("insert into covid_submission (" +
-                        "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, " +
+                        "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, test_result, " +
                         "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
                         "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat, " +
                         "_ip_addr) values (" +
-                        ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, " +
+                        ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, :test_result, " +
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat, " +
                         ":ip_addr)",

@@ -40,7 +40,7 @@ public class ExportController
 
         StreamingResponseBody stream = out -> {
 
-            String header = "id,sex,year_of_birth,zip,phone_digits,feels_healthy,has_been_tested,where_tested,when_tested," +
+            String header = "id,sex,year_of_birth,zip,phone_digits,feels_healthy,has_been_tested,where_tested,when_tested,test_result," +
                     "works_in_health,was_abroad,was_in_contact_with_case,chronic_condition,symptom_fever,symptom_coughing," +
                     "symptom_dyspnea,symptom_tiredness,symptom_throat,_created,_ip_addr\r\n";
             out.write(header.getBytes());
@@ -48,7 +48,7 @@ public class ExportController
             MapSqlParameterSource params = new MapSqlParameterSource();
             params.addValue("since", Timestamp.valueOf(since));
 
-            String query = "select id,sex,year_of_birth,zip,phone_digits,feels_healthy,has_been_tested,where_tested,when_tested," +
+            String query = "select id,sex,year_of_birth,zip,phone_digits,feels_healthy,has_been_tested,where_tested,when_tested,test_result," +
                     "works_in_health,was_abroad,was_in_contact_with_case,chronic_condition,symptom_fever,symptom_coughing," +
                     "symptom_dyspnea,symptom_tiredness,symptom_throat,_created,_ip_addr " +
                     "from covid_submission where _created >= :since";
@@ -65,6 +65,7 @@ public class ExportController
                             rs.getBoolean("has_been_tested"),
                             rs.getString("where_tested"),
                             rs.getString("when_tested"),
+                            rs.getString("test_result"),
                             rs.getString("works_in_health"),
                             rs.getString("was_abroad"),
                             rs.getString("was_in_contact_with_case"),
