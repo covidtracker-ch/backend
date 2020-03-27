@@ -8,7 +8,7 @@ create table covid_submission
     zip                      varchar(4)  not null,
     phone_digits             varchar(4),
     feels_healthy            bool        not null,
-    has_been_tested          bool        not null,
+    has_been_tested          bool,
     where_tested             varchar(255),
     when_tested              date,
     works_in_health          varchar(30),
