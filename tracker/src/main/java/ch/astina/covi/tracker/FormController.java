@@ -130,13 +130,13 @@ public class FormController
         params.addValue("test_result", data.testResult);
         params.addValue("works_in_health", data.worksInHealth);
         params.addValue("was_abroad", data.wasAbroad);
-        params.addValue("was_in_contact_with_case", data.wasInContactWithCase ? data.dateContacted : null);
+        params.addValue("was_in_contact_with_case", Boolean.TRUE.equals(data.wasInContactWithCase) ? data.dateContacted : null);
         params.addValue("chronic_condition", data.chronicConditionType);
-        params.addValue("symptom_fever", data.fever ? data.feverSince : null);
-        params.addValue("symptom_coughing", data.coughing ? data.coughingSince : null);
-        params.addValue("symptom_dyspnea", data.dyspnea ? data.dyspneaSince : null);
-        params.addValue("symptom_tiredness", data.tiredness ? data.tirednessSince : null);
-        params.addValue("symptom_throat", data.throat ? data.throatSince : null);
+        params.addValue("symptom_fever", Boolean.TRUE.equals(data.fever) ? data.feverSince : null);
+        params.addValue("symptom_coughing", Boolean.TRUE.equals(data.coughing) ? data.coughingSince : null);
+        params.addValue("symptom_dyspnea", Boolean.TRUE.equals(data.dyspnea) ? data.dyspneaSince : null);
+        params.addValue("symptom_tiredness", Boolean.TRUE.equals(data.tiredness) ? data.tirednessSince : null);
+        params.addValue("symptom_throat", Boolean.TRUE.equals(data.throat) ? data.throatSince : null);
 
         String ipAnon = Utils.anonymizeIp(request.getRemoteAddr());
         params.addValue("ip_addr", ipAnon);
