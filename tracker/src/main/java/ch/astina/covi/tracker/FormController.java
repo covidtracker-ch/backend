@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -29,9 +29,12 @@ public class FormController
 
     private final NamedParameterJdbcTemplate db;
 
-    public FormController(NamedParameterJdbcTemplate db)
+    private final Utils utils;
+
+    public FormController(NamedParameterJdbcTemplate db, Utils utils)
     {
         this.db = db;
+        this.utils = utils;
     }
 
     @CrossOrigin(origins = "https://www.covidtracker.ch", methods = RequestMethod.POST)
@@ -60,7 +63,7 @@ public class FormController
                                      @RequestParam(value = "tirednessSince", required = false) Integer tirednessSince,
                                      @RequestParam(value = "throat", required = false) Boolean throat,
                                      @RequestParam(value = "throatSince", required = false) Integer throatSince,
-                                     ServletRequest request)
+                                     HttpServletRequest request)
     {
         FormRequest data = new FormRequest(
                 sex,
@@ -104,14 +107,14 @@ public class FormController
 
     @CrossOrigin(origins = "*", methods = RequestMethod.POST)
     @PostMapping(value = "/save")
-    public ResponseEntity<Void> save(@RequestBody @Valid FormRequest data, ServletRequest request)
+    public ResponseEntity<Void> save(@RequestBody @Valid FormRequest data, HttpServletRequest request)
     {
         saveSubmission(data, request);
 
         return ResponseEntity.accepted().build();
     }
 
-    private void saveSubmission(@RequestBody @Valid FormRequest data, ServletRequest request)
+    private void saveSubmission(@RequestBody @Valid FormRequest data, HttpServletRequest request)
     {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.registerSqlType("sex", Types.VARCHAR);
@@ -138,18 +141,24 @@ public class FormController
         params.addValue("symptom_tiredness", Boolean.TRUE.equals(data.tiredness) ? data.tirednessSince : null);
         params.addValue("symptom_throat", Boolean.TRUE.equals(data.throat) ? data.throatSince : null);
 
-        String ipAnon = Utils.anonymizeIp(request.getRemoteAddr());
+        String ipAnon = utils.anonymizeIp(request.getRemoteAddr());
         params.addValue("ip_addr", ipAnon);
+
+        String ipHash = utils.hashIp(request.getRemoteAddr());
+        params.addValue("ip_hash", ipHash);
+
+        String uaHash = utils.hashUserAgent(request);
+        params.addValue("ua_hash", uaHash);
 
         db.update("insert into covid_submission (" +
                         "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, test_result, " +
                         "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
                         "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat, " +
-                        "_ip_addr) values (" +
+                        "_ip_addr, _ip_hash, _ua_hash) values (" +
                         ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, :test_result, " +
                         ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
                         ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat, " +
-                        ":ip_addr)",
+                        ":ip_addr, :ip_hash, :ua_hash)",
                 params);
     }
 

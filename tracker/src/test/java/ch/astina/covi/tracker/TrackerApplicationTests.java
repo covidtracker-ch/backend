@@ -85,7 +85,8 @@ class TrackerApplicationTests
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")
-                .param("chronicConditionType", "diabetes"))
+                .param("chronicConditionType", "diabetes")
+                .header("user-agent", "test"))
                 .andExpect(status().isFound())
                 .andExpect(header().string("Location", "https://www.covidtracker.ch/response.html"));
 
@@ -96,6 +97,8 @@ class TrackerApplicationTests
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertNotNull(rs.getDate("_created"));
             assertEquals("127.0.0.0", rs.getString("_ip_addr"));
+            assertEquals("08bd7b3f7d005739ab6b53fe71548ab5d65ccfca5651e1163e228dd264f3c10a", rs.getString("_ip_hash"));
+            assertEquals("88cd2108b5347d973cf39cdf9053d7dd42704876d8c9a9bd8e2d168259d3ddf7", rs.getString("_ua_hash"));
         });
     }
 

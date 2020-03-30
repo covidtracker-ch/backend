@@ -27,3 +27,11 @@ create table covid_submission
 
 create index covid_submission__created
     on covid_submission (_created);
+
+-- v0.0.15
+
+alter table covid_submission
+    add _ip_hash varchar(255);
+
+alter table covid_submission
+    add _ua_hash varchar(255);
