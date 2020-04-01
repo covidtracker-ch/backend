@@ -37,7 +37,11 @@ public class FormController
         this.utils = utils;
     }
 
-    @CrossOrigin(origins = "https://www.covidtracker.ch", methods = RequestMethod.POST)
+    @CrossOrigin(origins = {
+            "https://www.covidtracker.ch",
+            "https://staging.covidtracker.ch",
+            "http://localhost:4567"}, // Sam dev
+            methods = RequestMethod.POST)
     @PostMapping("/form")
     public ResponseEntity<Void> form(@RequestParam("sex") FormRequest.Gender sex,
                                      @RequestParam("yearOfBirth") @Min(1900) Integer yearOfBirth,
@@ -118,6 +122,7 @@ public class FormController
     {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.registerSqlType("sex", Types.VARCHAR);
+        params.registerSqlType("test_result", Types.VARCHAR);
         params.registerSqlType("works_in_health", Types.VARCHAR);
         params.registerSqlType("was_abroad", Types.VARCHAR);
         params.registerSqlType("chronic_condition", Types.VARCHAR);
