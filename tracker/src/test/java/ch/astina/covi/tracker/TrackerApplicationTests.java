@@ -82,6 +82,7 @@ class TrackerApplicationTests
                 .param("phoneDigits", "0056")
                 .param("feelsHealthy", "0")
                 .param("hasBeenTested", "0")
+                .param("testResult", "negative")
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")
@@ -94,6 +95,7 @@ class TrackerApplicationTests
 
             assertEquals("male", rs.getString("sex"));
             assertEquals(1990, rs.getInt("year_of_birth"));
+            assertEquals("negative", rs.getString("test_result"));
             assertNull(rs.getObject("symptom_fever", Integer.class));
             assertNotNull(rs.getDate("_created"));
             assertEquals("127.0.0.0", rs.getString("_ip_addr"));
