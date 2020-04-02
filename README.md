@@ -1,46 +1,10 @@
 COVID-19 Tracker
 ===
 
-## Build & Deployment
+# Development
 
-**Create JAR**
-  
-```
-mvn clean package
-```
+Use [Docker Compose](https://docs.docker.com/compose/) to start the PostgreSQL database.
 
-**Build Docker image**
-
-```
-docker build -t eu.gcr.io/astina-474925/covi-tracker:[VERSION] --no-cache . 
-```
-
-**Push Docker image**
-
-```
-docker push eu.gcr.io/astina-474925/covi-tracker:[VERSION]
-```
-
-**Update deployment config**
-
-Set image version in https://github.com/astina/covi-config/blob/master/deployment.yaml#L20
-and push.
-
-## Database
-
-**Connect to database**
-
-```
-kubectl port-forward -n sql-proxy svc/access-db-prod 5432
-```
-
-## Secrets
-
-*Note*: make sure `--namespace` is correct.
-
-```
-kubectl create secret --namespace=covid-export \
-    --from-literal=foo=bar \
-    --from-literal=baz=kux \
-    generic my-secret
-```
+`TrackerApplication` and `ExportApplication` are Spring Boot applications. 
+See the [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/2.2.6.RELEASE/reference/html/index.html)
+for more information.
