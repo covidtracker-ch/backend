@@ -42,12 +42,7 @@ public class Utils
                 }
             }
 
-            String result = InetAddresses.toAddrString(InetAddress.getByAddress(address));
-            if (address.length == 4) {
-                result = result.replaceFirst("\\.0$", ".0");
-            }
-
-            return result;
+            return InetAddresses.toAddrString(InetAddress.getByAddress(address));
 
         } catch (final Exception e) {
             log.error("Failed to anonymize IP address", e);
