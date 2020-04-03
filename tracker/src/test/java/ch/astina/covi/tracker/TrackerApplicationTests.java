@@ -1,5 +1,6 @@
 package ch.astina.covi.tracker;
 
+import ch.astina.covi.test.PostgresTestContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@PostgresTestContext
 class TrackerApplicationTests
 {
     @Autowired
@@ -56,7 +58,8 @@ class TrackerApplicationTests
                         "\t\"dyspneaSince\": null,\n" +
                         "\t\"tirednessSince\": null,\n" +
                         "\t\"throatSince\": null\n" +
-                        "}"))
+                        "}")
+                .header("user-agent", "test"))
                 .andExpect(status().isAccepted());
 
         db.query("select * from covid_submission order by _created desc limit 1", rs -> {

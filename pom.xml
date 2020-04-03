@@ -7,6 +7,7 @@
     <modules>
         <module>tracker</module>
         <module>export</module>
+        <module>test</module>
     </modules>
 
     <groupId>ch.astina.covi</groupId>
