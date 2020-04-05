@@ -16,6 +16,8 @@ import java.util.Optional;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FormRequest
 {
+    public final String participantCode;
+
     @NotNull
     public final Gender sex;
 
@@ -75,7 +77,8 @@ public class FormRequest
     public final Integer throatSince;
 
     @JsonCreator
-    public FormRequest(@JsonProperty("sex") @NotNull Gender sex,
+    public FormRequest(@JsonProperty("participantCode") String participantCode,
+                       @JsonProperty("sex") @NotNull Gender sex,
                        @JsonProperty("yearOfBirth") @Min(1900) Integer yearOfBirth,
                        @JsonProperty("zip") @Size(min = 4, max = 4) String zip,
                        @JsonProperty("phoneDigits") @Size(min = 4, max = 4) String phoneDigits,
@@ -100,6 +103,7 @@ public class FormRequest
                        @JsonProperty("throat") Boolean throat,
                        @JsonProperty("throatSince") Integer throatSince)
     {
+        this.participantCode = participantCode;
         this.sex = sex;
         this.yearOfBirth = yearOfBirth;
         this.zip = zip;
