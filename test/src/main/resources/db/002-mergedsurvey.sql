@@ -9,6 +9,11 @@ alter table covid_submission
     add is_smoker                       bool,
     add sought_medical_advice           bool,
 
+--     -- remap was_in_contact_with_case from a date to 'yes'/'probably'/'not that i'm aware of'
+--     -- adds in 'contact_date' as a replacement for was_in_contact_with_case
+--     add case_contact_date               date,
+--     add was_in_contact_with_case_xxx    varchar(10),
+
     add comorbidity_highBloodPressure   bool,
     add comorbidity_diabetes1           bool,
     add comorbidity_diabetes2           bool,
@@ -57,7 +62,9 @@ alter table covid_submission
 
     add behavior                        varchar(50);
 
+--
 -- migrate over year_of_birth into age_range
+--
 update covid_submission set age_range=(
     case
         when (date_part('year', now()) - year_of_birth) between 0 and 10 then '0-10'
@@ -77,7 +84,23 @@ alter table covid_submission
     alter column age_range set not null,
     alter column year_of_birth drop not null;
 
+-- --
+-- -- migrate over was_in_contact_with_case from a date to a string ('yes' if non-null, 'not_aware' if null)
+-- -- retain its previous value in case_contact_date
+-- --
+-- update covid_submission set
+--     case_contact_date=was_in_contact_with_case,
+--     was_in_contact_with_case_xxx=case
+--         when was_in_contact_with_case is null then 'not_aware'
+--         else 'yes'
+--     end;
+-- -- swap out temporary was_in_contact_with_case with the new one
+-- alter table covid_submission drop column was_in_contact_with_case;
+-- alter table covid_submission rename column was_in_contact_with_case_xxx to was_in_contact_with_case;
+
+--
 -- migrate existing symptom fields' "days since symptom" into dates
+--
 update covid_submission set
     symptom_fever_xxx=_created - ('1 day'::interval * symptom_fever),
     symptom_coughing_xxx=_created - ('1 day'::interval * symptom_coughing),
@@ -85,7 +108,9 @@ update covid_submission set
     symptom_tiredness_xxx=_created - ('1 day'::interval * symptom_tiredness),
     symptom_throat_xxx=_created - ('1 day'::interval * symptom_throat);
 
--- swap out temporary fields for our new ones
+--
+-- swap out temporary symptom fields for our new ones
+--
 alter table covid_submission
     drop column symptom_fever,
     drop column symptom_coughing,
