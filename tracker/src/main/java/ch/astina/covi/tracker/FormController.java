@@ -25,29 +25,19 @@ import java.util.concurrent.atomic.AtomicReference;
 @RestController
 public class FormController
 {
-
-    private final URI FORM_REDIRECT_URL_ERROR;
-    private final URI FORM_REDIRECT_URL_SUCCESS;
-
     private final static Logger log = LoggerFactory.getLogger(FormController.class);
 
     private final NamedParameterJdbcTemplate db;
 
     private final Utils utils;
 
-    public FormController(NamedParameterJdbcTemplate db, Utils utils)
+    private final AppProperties properties;
+
+    public FormController(NamedParameterJdbcTemplate db, Utils utils, AppProperties properties)
     {
         this.db = db;
         this.utils = utils;
-
-        String host = System.getenv("REDIRECT_HOST");
-
-        if (host == null) {
-            host = "https://www.covidtracker.ch";
-        }
-
-        this.FORM_REDIRECT_URL_ERROR = URI.create(host + "/?error=true");
-        this.FORM_REDIRECT_URL_SUCCESS = URI.create(host + "/response.html");
+        this.properties = properties;
     }
 
     private static URI appendUriParam(URI oldUri, String appendQuery) throws URISyntaxException {
@@ -228,14 +218,13 @@ public class FormController
         );
         try {
             String code = saveSubmission(data, request);
-            URI responseWithCode = appendUriParam(FORM_REDIRECT_URL_SUCCESS, "code=" + code);
 
-            return redirect(responseWithCode);
+            return redirect(appendUriParam(properties.getRedirectUrlSuccess(), "code=" + code));
 
         } catch (Exception e) {
             log.error("Error saving form submission", e);
 
-            return redirect(FORM_REDIRECT_URL_ERROR);
+            return redirect(properties.getRedirectUrlError());
         }
     }
 
@@ -412,7 +401,7 @@ public class FormController
     public ResponseEntity<Void> onError(HttpServletRequest req, Exception ex)
     {
         log.error("Request: " + req.getRequestURL() + " raised " + ex);
-        return redirect(FORM_REDIRECT_URL_ERROR);
+        return redirect(properties.getRedirectUrlError());
     }
 
     private ResponseEntity<Void> redirect(URI formRedirectUrlSuccess)
