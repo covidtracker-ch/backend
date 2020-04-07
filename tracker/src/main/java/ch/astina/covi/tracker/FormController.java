@@ -21,20 +21,19 @@ import java.time.LocalDate;
 @RestController
 public class FormController
 {
-    private static final URI FORM_REDIRECT_URL_ERROR = URI.create("https://www.covidtracker.ch/?error=true");
-
-    private static final URI FORM_REDIRECT_URL_SUCCESS = URI.create("https://www.covidtracker.ch/response.html");
-
     private final static Logger log = LoggerFactory.getLogger(FormController.class);
 
     private final NamedParameterJdbcTemplate db;
 
     private final Utils utils;
 
-    public FormController(NamedParameterJdbcTemplate db, Utils utils)
+    private final AppProperties properties;
+
+    public FormController(NamedParameterJdbcTemplate db, Utils utils, AppProperties properties)
     {
         this.db = db;
         this.utils = utils;
+        this.properties = properties;
     }
 
     @CrossOrigin(origins = {
@@ -99,13 +98,13 @@ public class FormController
 
             saveSubmission(data, request);
 
-            return redirect(FORM_REDIRECT_URL_SUCCESS);
+            return redirect(properties.getRedirectUrlSuccess());
 
         } catch (Exception e) {
 
             log.error("Error saving form submission", e);
 
-            return redirect(FORM_REDIRECT_URL_ERROR);
+            return redirect(properties.getRedirectUrlError());
         }
     }
 
@@ -170,7 +169,7 @@ public class FormController
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Void> onError()
     {
-        return redirect(FORM_REDIRECT_URL_ERROR);
+        return redirect(properties.getRedirectUrlError());
     }
 
     private ResponseEntity<Void> redirect(URI formRedirectUrlSuccess)
