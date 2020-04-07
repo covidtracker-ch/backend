@@ -6,7 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UtilsTest
 {
-    private final Utils utils = new Utils("test");
+    private final Utils utils;
+    {
+        AppProperties properties = new AppProperties();
+        properties.setSecret("test");
+        utils = new Utils(properties);
+    }
 
     @Test
     void anonymizeIp()

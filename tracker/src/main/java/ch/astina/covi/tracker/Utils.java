@@ -22,10 +22,10 @@ public class Utils
 
     private final HashFunction hashFunction;
 
-    public Utils(@Value("${app.secret}") String secret)
+    public Utils(AppProperties properties)
     {
-        Assert.notNull(secret, "${app.secret} cannot be null");
-        hashFunction = Hashing.hmacSha256(new SecretKeySpec(secret.getBytes(UTF_8), "HmacSHA256"));
+        Assert.notNull(properties.getSecret(), "${app.secret} cannot be null");
+        hashFunction = Hashing.hmacSha256(new SecretKeySpec(properties.getSecret().getBytes(UTF_8), "HmacSHA256"));
     }
 
     public String anonymizeIp(String addr)
