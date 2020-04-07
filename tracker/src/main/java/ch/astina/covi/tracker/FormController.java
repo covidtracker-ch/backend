@@ -57,6 +57,7 @@ public class FormController
     @CrossOrigin(origins = {
             "https://www.covidtracker.ch",
             "https://staging.covidtracker.ch",
+            "https://covid-stage.apps-customer.210235761750.ninegcp.ch",
             "http://localhost:4567"}, // Sam dev
             methods = RequestMethod.POST)
     @PostMapping("/form")
