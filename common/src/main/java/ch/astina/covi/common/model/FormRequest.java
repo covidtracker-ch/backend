@@ -1,4 +1,4 @@
-package ch.astina.covi.tracker;
+package ch.astina.covi.common.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -165,5 +165,15 @@ public class FormRequest
         lung,
         diabetes,
         other,
+    }
+
+    @Override
+    public String toString()
+    {
+        return "FormRequest{" +
+                "sex=" + sex +
+                ", yearOfBirth=" + yearOfBirth +
+                ", zip='" + zip + '\'' +
+                '}';
     }
 }

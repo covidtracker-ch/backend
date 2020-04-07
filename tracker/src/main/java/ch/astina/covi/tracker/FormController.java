@@ -1,13 +1,12 @@
 package ch.astina.covi.tracker;
 
+import ch.astina.covi.common.model.FormRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.net.URI;
-import java.sql.Types;
 import java.time.LocalDate;
 
 @RestController
@@ -27,14 +25,11 @@ public class FormController
 
     private final static Logger log = LoggerFactory.getLogger(FormController.class);
 
-    private final NamedParameterJdbcTemplate db;
+    private final SubmissionHandler submissionHandler;
 
-    private final Utils utils;
-
-    public FormController(NamedParameterJdbcTemplate db, Utils utils)
+    public FormController(SubmissionHandler submissionHandler)
     {
-        this.db = db;
-        this.utils = utils;
+        this.submissionHandler = submissionHandler;
     }
 
     @CrossOrigin(origins = {
@@ -118,53 +113,9 @@ public class FormController
         return ResponseEntity.accepted().build();
     }
 
-    private void saveSubmission(@RequestBody @Valid FormRequest data, HttpServletRequest request)
+    private void saveSubmission(FormRequest data, HttpServletRequest request)
     {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.registerSqlType("sex", Types.VARCHAR);
-        params.registerSqlType("test_result", Types.VARCHAR);
-        params.registerSqlType("works_in_health", Types.VARCHAR);
-        params.registerSqlType("was_abroad", Types.VARCHAR);
-        params.registerSqlType("chronic_condition", Types.VARCHAR);
-
-        params.addValue("sex", data.sex);
-        params.addValue("year_of_birth", data.yearOfBirth);
-        params.addValue("zip", data.zip);
-        params.addValue("phone_digits", data.phoneDigits);
-        params.addValue("feels_healthy", data.feelsHealthy);
-        params.addValue("has_been_tested", data.hasBeenTested);
-        params.addValue("where_tested", data.whereTested);
-        params.addValue("when_tested", data.whenTested);
-        params.addValue("test_result", data.testResult);
-        params.addValue("works_in_health", data.worksInHealth);
-        params.addValue("was_abroad", data.wasAbroad);
-        params.addValue("was_in_contact_with_case", Boolean.TRUE.equals(data.wasInContactWithCase) ? data.dateContacted : null);
-        params.addValue("chronic_condition", data.chronicConditionType);
-        params.addValue("symptom_fever", Boolean.TRUE.equals(data.fever) ? data.feverSince : null);
-        params.addValue("symptom_coughing", Boolean.TRUE.equals(data.coughing) ? data.coughingSince : null);
-        params.addValue("symptom_dyspnea", Boolean.TRUE.equals(data.dyspnea) ? data.dyspneaSince : null);
-        params.addValue("symptom_tiredness", Boolean.TRUE.equals(data.tiredness) ? data.tirednessSince : null);
-        params.addValue("symptom_throat", Boolean.TRUE.equals(data.throat) ? data.throatSince : null);
-
-        String ipAnon = utils.anonymizeIp(request.getRemoteAddr());
-        params.addValue("ip_addr", ipAnon);
-
-        String ipHash = utils.hashIp(request.getRemoteAddr());
-        params.addValue("ip_hash", ipHash);
-
-        String uaHash = utils.hashUserAgent(request);
-        params.addValue("ua_hash", uaHash);
-
-        db.update("insert into covid_submission (" +
-                        "sex, year_of_birth, zip, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, test_result, " +
-                        "works_in_health, was_abroad, was_in_contact_with_case, chronic_condition, " +
-                        "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat, " +
-                        "_ip_addr, _ip_hash, _ua_hash) values (" +
-                        ":sex, :year_of_birth, :zip, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, :test_result, " +
-                        ":works_in_health, :was_abroad, :was_in_contact_with_case, :chronic_condition, " +
-                        ":symptom_fever, :symptom_coughing, :symptom_dyspnea, :symptom_tiredness, :symptom_throat, " +
-                        ":ip_addr, :ip_hash, :ua_hash)",
-                params);
+        submissionHandler.handle(data, request);
     }
 
     @ExceptionHandler(Exception.class)
