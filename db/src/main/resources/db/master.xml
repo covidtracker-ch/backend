@@ -1,0 +1,30 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="pkraeutli" id="000">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="covid_submission"/>
+            </not>
+        </preConditions>
+        <sqlFile path="changelog/000-init.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet author="falquaddoomi" id="001">
+        <sqlFile path="changelog/001-participantcodes.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+    <changeSet author="falquaddoomi" id="002">
+        <sqlFile path="changelog/002-mergedsurvey.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
+</databaseChangeLog>

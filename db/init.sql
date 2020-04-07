@@ -1,1 +1,0 @@
-../test/src/main/resources/db/init.sql
