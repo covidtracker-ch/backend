@@ -27,18 +27,28 @@ public class PostgresDbInitializer implements InitializingBean
     public void afterPropertiesSet()
     {
         // Load db/init.sql script and execute it
-
         ClassPathResource dbResource = new ClassPathResource("db/init.sql");
 
         try (Reader reader = new InputStreamReader(dbResource.getInputStream(), UTF_8)) {
-
             String sql = FileCopyUtils.copyToString(reader);
-
             db.execute(sql);
-
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
 
+        // load extra "migrations"
+        ClassPathResource[] migrations = new ClassPathResource[]{
+            new ClassPathResource("db/001-participantcodes.sql"),
+            new ClassPathResource("db/002-mergedsurvey.sql")
+        };
+
+        for (ClassPathResource p : migrations) {
+            try (Reader reader = new InputStreamReader(p.getInputStream(), UTF_8)) {
+                String sql = FileCopyUtils.copyToString(reader);
+                db.execute(sql);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
     }
 }
