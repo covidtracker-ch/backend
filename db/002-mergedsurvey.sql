@@ -1,1 +1,0 @@
-../test/src/main/resources/db/002-mergedsurvey.sql

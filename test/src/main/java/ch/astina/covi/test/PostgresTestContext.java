@@ -1,6 +1,5 @@
 package ch.astina.covi.test;
 
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.lang.annotation.*;
@@ -9,9 +8,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @ContextConfiguration(initializers = PostgresContainerInitializer.class)
-@Import({
-        PostgresDbInitializer.class
-})
 public @interface PostgresTestContext
 {
 }
