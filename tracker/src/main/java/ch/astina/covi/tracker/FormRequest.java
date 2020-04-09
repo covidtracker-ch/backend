@@ -369,6 +369,15 @@ public class FormRequest
         typical_activity
     }
 
+    public enum UserLanguage
+    {
+        en,
+        de,
+        fr,
+        it
+    }
+
+
     private static class AgeRangeStringToEnumConverter implements Converter<String, FormRequest.AgeRange> {
         @Override
         public FormRequest.AgeRange convert(String source) {

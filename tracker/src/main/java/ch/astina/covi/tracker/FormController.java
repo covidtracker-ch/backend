@@ -54,6 +54,28 @@ public class FormController
                 oldUri.getPath(), newQuery, oldUri.getFragment());
     }
 
+    private static URI prependLanguageCode(URI oldUri, FormRequest.UserLanguage userLang) {
+        // use the submitted language to construct a response URL w/an embedded language
+        // (if it's german there's no prefix, so we return the URI unmodified)
+        if (userLang != FormRequest.UserLanguage.de) {
+            // reconstruct the URL with a new path, but everything else the same
+            try {
+                return new URI(
+                        oldUri.getScheme(),
+                        oldUri.getAuthority(),
+                        "/" + userLang.toString() + oldUri.getPath(),
+                        oldUri.getQuery(),
+                        oldUri.getFragment()
+                );
+            } catch (URISyntaxException e) {
+                // if we munge something, just return what we had before, which will still work...
+                return oldUri;
+            }
+        }
+
+        return oldUri;
+    }
+
     @CrossOrigin(origins = {
             "https://www.covidtracker.ch",
             "https://staging.covidtracker.ch",
@@ -136,6 +158,8 @@ public class FormController
             @RequestParam(value = "previousRunnyNose", required = false) Boolean previousRunnyNose,
             @RequestParam(value = "previousDiarrhea", required = false) Boolean previousDiarrhea,
             @RequestParam(value = "previousLostTaste", required = false) Boolean previousLostTaste,
+
+            @RequestParam(value = "lang", defaultValue = "de") FormRequest.UserLanguage userLang,
 
             @RequestParam("behavior") FormRequest.Behavior behavior,
 
@@ -220,12 +244,16 @@ public class FormController
         try {
             String code = saveSubmission(data, request);
 
-            return redirect(appendUriParam(properties.getRedirectUrlSuccess(), "code=" + code));
+            URI finalUri = appendUriParam(properties.getRedirectUrlSuccess(), "code=" + code);
+            finalUri = prependLanguageCode(finalUri, userLang);
+            return redirect(finalUri);
 
         } catch (Exception e) {
             log.error("Error saving form submission", e);
 
-            return redirect(properties.getRedirectUrlError());
+            URI finalUri = properties.getRedirectUrlError();
+            finalUri = prependLanguageCode(finalUri, userLang);
+            return redirect(finalUri);
         }
     }
 
@@ -401,8 +429,16 @@ public class FormController
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Void> onError(HttpServletRequest req, Exception ex)
     {
-        log.error("Request: " + req.getRequestURL() + " raised " + ex);
-        return redirect(properties.getRedirectUrlError());
+        try {
+            log.error("Request: " + req.getRequestURL() + " raised " + ex);
+            URI finalUri = properties.getRedirectUrlError();
+            finalUri = prependLanguageCode(finalUri, FormRequest.UserLanguage.valueOf(req.getParameter("lang")));
+            return redirect(finalUri);
+        }
+        catch (Exception e) {
+            log.error("Request: " + req.getRequestURL() + " raised unhandled " + e, ex);
+            return redirect(properties.getRedirectUrlError());
+        }
     }
 
     private ResponseEntity<Void> redirect(URI formRedirectUrlSuccess)

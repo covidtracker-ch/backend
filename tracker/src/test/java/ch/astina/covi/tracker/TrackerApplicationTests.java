@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
 
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -386,5 +387,65 @@ class TrackerApplicationTests
             assertEquals("08bd7b3f7d005739ab6b53fe71548ab5d65ccfca5651e1163e228dd264f3c10a", rs.getString("_ip_hash"));
             assertEquals("88cd2108b5347d973cf39cdf9053d7dd42704876d8c9a9bd8e2d168259d3ddf7", rs.getString("_ua_hash"));
         });
+    }
+
+    @Test
+    void submittingWithLangRedirectsCorrectly() throws Exception
+    {
+        mockMvc.perform(post("/form")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sex", "male")
+                .param("yearOfBirth", "1990")
+                .param("ageRange", "21-30")
+                .param("zip", "9000")
+                .param("householdSize", "3")
+                .param("phoneDigits", "0056")
+                .param("feelsHealthy", "0")
+                .param("previouslyUnhealthy", "0")
+                .param("hasBeenTested", "0")
+                .param("testResult", "negative")
+                .param("worksInHealth", "private_practice")
+                .param("wasAbroad", "no")
+                .param("wasInContactWithCase", "0")
+                .param("behavior", "self_isolation")
+                .param("lang", "fr")
+                .header("user-agent", "test"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", startsWith("https://www.covidtracker.ch/fr/response.html")));
+    }
+
+    @Test
+    public void errorReturnsLanguageSpecificURL() throws Exception
+    {
+        mockMvc.perform(post("/form")
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("lang", "fr"))
+            .andExpect(status().isFound())
+            .andExpect(header().string("Location", "https://www.covidtracker.ch/fr/?error=true"));
+    }
+
+    @Test
+    void submittingWithInvalidLangFails() throws Exception
+    {
+        mockMvc.perform(post("/form")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("sex", "male")
+                .param("yearOfBirth", "1990")
+                .param("ageRange", "21-30")
+                .param("zip", "9000")
+                .param("householdSize", "3")
+                .param("phoneDigits", "0056")
+                .param("feelsHealthy", "0")
+                .param("previouslyUnhealthy", "0")
+                .param("hasBeenTested", "0")
+                .param("testResult", "negative")
+                .param("worksInHealth", "private_practice")
+                .param("wasAbroad", "no")
+                .param("wasInContactWithCase", "0")
+                .param("behavior", "self_isolation")
+                .param("lang", "lunarian")
+                .header("user-agent", "test"))
+                .andExpect(status().isFound())
+                .andExpect(header().string("Location", "https://www.covidtracker.ch/?error=true"));
     }
 }
