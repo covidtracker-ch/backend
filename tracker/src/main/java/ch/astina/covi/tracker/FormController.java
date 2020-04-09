@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,6 +40,42 @@ public class FormController
         this.db = db;
         this.utils = utils;
         this.properties = properties;
+    }
+
+    private static URI appendUriParam(URI oldUri, String appendQuery) throws URISyntaxException {
+        String newQuery = oldUri.getQuery();
+
+        if (newQuery == null) {
+            newQuery = appendQuery;
+        }
+        else {
+            newQuery += "&" + appendQuery;
+        }
+
+        return new URI(oldUri.getScheme(), oldUri.getAuthority(),
+                oldUri.getPath(), newQuery, oldUri.getFragment());
+    }
+
+    private static URI prependLanguageCode(URI oldUri, FormRequest.UserLanguage userLang) {
+        // use the submitted language to construct a response URL w/an embedded language
+        // (if it's german there's no prefix, so we return the URI unmodified)
+        if (userLang != FormRequest.UserLanguage.de) {
+            // reconstruct the URL with a new path, but everything else the same
+            try {
+                return new URI(
+                        oldUri.getScheme(),
+                        oldUri.getAuthority(),
+                        "/" + userLang.toString() + oldUri.getPath(),
+                        oldUri.getQuery(),
+                        oldUri.getFragment()
+                );
+            } catch (URISyntaxException e) {
+                // if we munge something, just return what we had before, which will still work...
+                return oldUri;
+            }
+        }
+
+        return oldUri;
     }
 
     @CrossOrigin(origins = {
