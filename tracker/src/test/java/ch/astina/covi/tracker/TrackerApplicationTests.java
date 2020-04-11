@@ -448,4 +448,17 @@ class TrackerApplicationTests
                 .andExpect(status().isFound())
                 .andExpect(header().string("Location", "https://www.covidtracker.ch/?error=true"));
     }
+
+    @Test
+    void subscribeToMailingList() throws Exception
+    {
+        mockMvc.perform(post("/mailinglist/subscribe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("email", "fozzy@sesamestreet.org"))
+                .andExpect(status().isOk());
+
+        db.query("select * from covid_mailinglist order by _created desc limit 1", rs -> {
+            assertEquals("fozzy@sesamestreet.org", rs.getString("email"));
+        });
+    }
 }

@@ -27,4 +27,11 @@
                  stripComments="false"/>
     </changeSet>
 
+    <changeSet author="falquaddoomi" id="003">
+        <sqlFile path="changelog/003-mailinglist.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
 </databaseChangeLog>
