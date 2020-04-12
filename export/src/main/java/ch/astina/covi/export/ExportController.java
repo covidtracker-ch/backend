@@ -46,7 +46,7 @@ public class ExportController
                 CSVPrinter csvPrinter = new CSVPrinter(
                     new OutputStreamWriter(outputStream, StandardCharsets.UTF_8),
                     CSVFormat.EXCEL.withHeader(
-                        "id",
+                        "id", "participant_code",
 
                         // general
                         "sex", "age_range", "zip", "phone_digits", "household_size",
@@ -89,6 +89,7 @@ public class ExportController
                     try {
                         csvPrinter.printRecord(
                                 rs.getString("id"),
+                                rs.getString("participant_code"),
 
                                 rs.getString("sex"),
                                 rs.getString("age_range"),
