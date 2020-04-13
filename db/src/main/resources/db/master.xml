@@ -34,4 +34,11 @@
                  stripComments="false"/>
     </changeSet>
 
+    <changeSet author="falquaddoomi" id="004">
+        <sqlFile path="changelog/003-fix-partcodes.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
 </databaseChangeLog>
