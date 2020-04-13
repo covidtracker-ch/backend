@@ -168,6 +168,41 @@ class TrackerApplicationTests
     }
 
     @Test
+    void saveWithSentinelGetsNewOne() throws Exception
+    {
+        String sentinel = "__replace-me__";
+
+        mockMvc.perform(post("/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "\t\"sex\": \"female\",\n" +
+                        "\t\"participantCode\": \"" + sentinel + "\",\n" +
+                        "\t\"ageRange\": \"51-60\",\n" +
+                        "\t\"zip\": \"8708\",\n" +
+                        "\t\"phoneDigits\": \"9404\",\n" +
+                        "\t\"feelsHealthy\": 1,\n" +
+                        "\t\"previouslyUnhealthy\": 0,\n" +
+                        "\t\"hasBeenTested\": true,\n" +
+                        "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
+                        "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"worksInHealth\": \"no\",\n" +
+                        "\t\"wasAbroad\": \"italy\",\n" +
+                        "\t\"wasInContactWithCase\": true,\n" +
+                        "\t\"dateContacted\": \"2020-03-10\",\n" +
+                        "\t\"feverSince\": null,\n" +
+                        "\t\"coughingSince\": \"2020-03-10\",\n" +
+                        "\t\"dyspneaSince\": null,\n" +
+                        "\t\"tirednessSince\": null,\n" +
+                        "\t\"throatSince\": null\n" +
+                        "}"))
+                .andExpect(status().isAccepted());
+
+        db.query("select * from covid_submission order by _created desc limit 1", rs -> {
+            assertTrue(rs.getString("participant_code").matches("^[0-9A-Z]{6}$"));
+        });
+    }
+
+    @Test
     void saveWithCodeGetsSameOne() throws Exception
     {
         final String code = "A7CXWG";

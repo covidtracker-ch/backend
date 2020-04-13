@@ -35,7 +35,7 @@
     </changeSet>
 
     <changeSet author="falquaddoomi" id="004">
-        <sqlFile path="changelog/003-fix-partcodes.sql"
+        <sqlFile path="changelog/004-fix-partcodes.sql"
                  relativeToChangelogFile="true"
                  splitStatements="false"
                  stripComments="false"/>
