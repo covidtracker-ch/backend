@@ -93,7 +93,7 @@ public class ExportController
 
                                 rs.getString("sex"),
                                 rs.getString("age_range"),
-                                rs.getInt("zip"),
+                                rs.getString("zip"),
                                 rs.getString("phone_digits"),
                                 rs.getInt("household_size"),
                                 rs.getBoolean("feels_healthy"),
