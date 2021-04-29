@@ -98,6 +98,10 @@ public class FormController
             @RequestParam(value = "hasBeenTested", required = false) Boolean hasBeenTested,
             @RequestParam(value = "whenTested", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenTested,
             @RequestParam(value = "whereTested", required = false) @Size(max = 255) String whereTested,
+            @RequestParam(value = "hasBeenVaccinated") FormRequest.HasBeenVaccinated hasBeenVaccinated,
+            @RequestParam(value = "whenVaccinatedFirst", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenVaccinatedFirst,
+            @RequestParam(value = "whenVaccinatedSecond", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenVaccinatedSecond,
+            @RequestParam(value = "vaccineType", required = false) FormRequest.VaccineType vaccineType,
             @RequestParam(value = "soughtMedicalAdvice", required = false) Boolean soughtMedicalAdvice,
             @RequestParam(value = "testResult", required = false) FormRequest.TestResult testResult,
             @RequestParam(value = "worksInHealth", required = false) FormRequest.WorksInHealth worksInHealth,
@@ -181,6 +185,10 @@ public class FormController
                 hasBeenTested,
                 whenTested,
                 whereTested,
+                hasBeenVaccinated,
+                whenVaccinatedFirst,
+                whenVaccinatedSecond,
+                vaccineType,
                 soughtMedicalAdvice,
                 testResult,
                 worksInHealth,
@@ -275,6 +283,8 @@ public class FormController
         params.registerSqlType("sex", Types.VARCHAR);
         params.registerSqlType("age_range", Types.VARCHAR);
         params.registerSqlType("test_result", Types.VARCHAR);
+        params.registerSqlType("has_been_vaccinated", Types.VARCHAR);
+        params.registerSqlType("vaccine_type", Types.VARCHAR);
         params.registerSqlType("works_in_health", Types.VARCHAR);
         params.registerSqlType("was_abroad", Types.VARCHAR);
         params.registerSqlType("behavior", Types.VARCHAR);
@@ -291,6 +301,10 @@ public class FormController
         params.addValue("has_been_tested", data.hasBeenTested);
         params.addValue("where_tested", data.whereTested);
         params.addValue("when_tested", data.whenTested);
+        params.addValue("has_been_vaccinated", data.hasBeenVaccinated);
+        params.addValue("when_vaccinated_first", data.whenVaccinatedFirst);
+        params.addValue("when_vaccinated_second", data.whenVaccinatedSecond);
+        params.addValue("vaccine_type", data.vaccineType);
         params.addValue("sought_medical_advice", data.soughtMedicalAdvice);
         params.addValue("test_result", data.testResult);
         params.addValue("works_in_health", data.worksInHealth);
@@ -354,7 +368,9 @@ public class FormController
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         db.update("insert into covid_submission (" +
-                "participant_code, sex, year_of_birth, age_range, zip, household_size, phone_digits, feels_healthy, has_been_tested, where_tested, when_tested, test_result, " +
+                "participant_code, sex, year_of_birth, age_range, zip, household_size, phone_digits, feels_healthy, " + 
+                "has_been_tested, where_tested, when_tested, test_result, " +
+                "has_been_vaccinated, when_vaccinated_first, when_vaccinated_second, vaccine_type, " +
                 "works_in_health, was_abroad, was_in_contact_with_case, " +
                 "previously_unhealthy, sought_medical_advice, leaving_home_for_work, is_smoker, " +
                 "symptom_fever, symptom_coughing, symptom_dyspnea, symptom_tiredness, symptom_throat, " +
@@ -371,7 +387,9 @@ public class FormController
 
                 "_ip_addr, _ip_hash, _ua_hash" +
             ") values (" +
-                ":participant_code, :sex, :year_of_birth, :age_range, :zip, :household_size, :phone_digits, :feels_healthy, :has_been_tested, :where_tested, :when_tested, :test_result, " +
+                ":participant_code, :sex, :year_of_birth, :age_range, :zip, :household_size, :phone_digits, :feels_healthy, "+
+                ":has_been_tested, :where_tested, :when_tested, :test_result, " +
+                ":has_been_vaccinated, :when_vaccinated_first, :when_vaccinated_second, :vaccine_type, " +
                 ":works_in_health, :was_abroad, :was_in_contact_with_case, " +
 
                 ":previously_unhealthy, " +
