@@ -19,3 +19,5 @@ services:
       - "DB_PASSWORD=${POSTGRES_PASSWORD}"
       - "APP_SECRET=${APP_SECRET}"
       - "FRONTEND_URL=http://localhost:4567"
+    depends_on:
+      - db
