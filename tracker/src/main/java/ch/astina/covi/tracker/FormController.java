@@ -98,7 +98,7 @@ public class FormController
             @RequestParam(value = "hasBeenTested", required = false) Boolean hasBeenTested,
             @RequestParam(value = "whenTested", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenTested,
             @RequestParam(value = "whereTested", required = false) @Size(max = 255) String whereTested,
-            @RequestParam(value = "hasBeenVaccinated") FormRequest.HasBeenVaccinated hasBeenVaccinated,
+            @RequestParam(value = "hasBeenVaccinated", required = false) FormRequest.HasBeenVaccinated hasBeenVaccinated,
             @RequestParam(value = "whenVaccinatedFirst", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenVaccinatedFirst,
             @RequestParam(value = "whenVaccinatedSecond", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate whenVaccinatedSecond,
             @RequestParam(value = "vaccineType", required = false) FormRequest.VaccineType vaccineType,
