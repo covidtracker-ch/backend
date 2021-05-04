@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  export:
+    build: ./export
+    ports:
+      - "8088:8080"
+
+  tracker:
+    build: ./tracker
+    ports:
+      - "5000:8080"
+    environment:
+      - "spring_profiles_active=dev"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
+      - "DB_NAME=${POSTGRES_DB}"
+      - "DB_USER=${POSTGRES_USER}"
+      - "DB_PASSWORD=${POSTGRES_PASSWORD}"
+      - "APP_SECRET=${APP_SECRET}"
+      - "FRONTEND_URL=http://localhost:4567"
+    depends_on:
+      - db

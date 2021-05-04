@@ -50,6 +50,7 @@ class TrackerApplicationTests
                         "\t\"hasBeenTested\": true,\n" +
                         "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
                         "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"hasBeenVaccinated\": \"no\",\n" +
                         "\t\"worksInHealth\": \"no\",\n" +
                         "\t\"wasAbroad\": \"italy\",\n" +
                         "\t\"wasInContactWithCase\": true,\n" +
@@ -90,6 +91,7 @@ class TrackerApplicationTests
                 .param("previouslyUnhealthy", "0")
                 .param("hasBeenTested", "0")
                 .param("testResult", "negative")
+                .param("hasBeenVaccinated", "no")
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")
@@ -139,6 +141,7 @@ class TrackerApplicationTests
                         "\t\"hasBeenTested\": true,\n" +
                         "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
                         "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"hasBeenVaccinated\": \"no\",\n" +
                         "\t\"worksInHealth\": \"no\",\n" +
                         "\t\"wasAbroad\": \"italy\",\n" +
                         "\t\"wasInContactWithCase\": true,\n" +
@@ -185,6 +188,7 @@ class TrackerApplicationTests
                         "\t\"hasBeenTested\": true,\n" +
                         "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
                         "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"hasBeenVaccinated\": \"no\",\n" +
                         "\t\"worksInHealth\": \"no\",\n" +
                         "\t\"wasAbroad\": \"italy\",\n" +
                         "\t\"wasInContactWithCase\": true,\n" +
@@ -220,6 +224,7 @@ class TrackerApplicationTests
                         "\t\"hasBeenTested\": true,\n" +
                         "\t\"whereTested\": \"Kantonsspital Zürich\",\n" +
                         "\t\"whenTested\": \"2020-03-23\",\n" +
+                        "\t\"hasBeenVaccinated\": \"no\",\n" +
                         "\t\"worksInHealth\": \"no\",\n" +
                         "\t\"wasAbroad\": \"italy\",\n" +
                         "\t\"wasInContactWithCase\": true,\n" +
@@ -268,6 +273,7 @@ class TrackerApplicationTests
                 .param("previouslyUnhealthy", "0")
                 .param("hasBeenTested", "0")
                 .param("testResult", "negative")
+                .param("hasBeenVaccinated", "no")
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")
@@ -293,6 +299,7 @@ class TrackerApplicationTests
                 .param("whereTested", "Ticino")
                 .param("soughtMedicalAdvice", "0")
                 .param("testResult", "positive")
+                .param("hasBeenVaccinated", "no")
                 .param("worksInHealth", "no")
                 .param("leavingHomeForWork", "1")
                 .param("wasAbroad", "italy")
@@ -439,6 +446,7 @@ class TrackerApplicationTests
                 .param("previouslyUnhealthy", "0")
                 .param("hasBeenTested", "0")
                 .param("testResult", "negative")
+                .param("hasBeenVaccinated", "no")
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")
@@ -474,6 +482,7 @@ class TrackerApplicationTests
                 .param("previouslyUnhealthy", "0")
                 .param("hasBeenTested", "0")
                 .param("testResult", "negative")
+                .param("hasBeenVaccinated", "no")
                 .param("worksInHealth", "private_practice")
                 .param("wasAbroad", "no")
                 .param("wasInContactWithCase", "0")

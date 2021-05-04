@@ -41,4 +41,11 @@
                  stripComments="false"/>
     </changeSet>
 
+    <changeSet author="falquaddoomi" id="005">
+        <sqlFile path="changelog/005-add-vaccination.sql"
+                 relativeToChangelogFile="true"
+                 splitStatements="false"
+                 stripComments="false"/>
+    </changeSet>
+
 </databaseChangeLog>

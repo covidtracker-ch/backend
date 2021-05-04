@@ -51,6 +51,11 @@ public class FormRequest
 
     public final LocalDate whenTested;
 
+    public final HasBeenVaccinated hasBeenVaccinated;
+    public final LocalDate whenVaccinatedFirst;
+    public final LocalDate whenVaccinatedSecond;
+    public final VaccineType vaccineType;
+
     @Size(max = 255)
     public final String whereTested;
 
@@ -150,6 +155,10 @@ public class FormRequest
             @JsonProperty("hasBeenTested") Boolean hasBeenTested,
             @JsonProperty("whenTested") LocalDate whenTested,
             @JsonProperty("whereTested") String whereTested,
+            @JsonProperty("hasBeenVaccinated") HasBeenVaccinated hasBeenVaccinated,
+            @JsonProperty("whenVaccinatedFirst") LocalDate whenVaccinatedFirst,
+            @JsonProperty("whenVaccinatedSecond") LocalDate whenVaccinatedSecond,
+            @JsonProperty("vaccineType") VaccineType vaccineType,
             @JsonProperty("soughtMedicalAdvice") Boolean soughtMedicalAdvice,
             @JsonProperty("testResult") TestResult testResult,
             @JsonProperty("worksInHealth") WorksInHealth worksInHealth,
@@ -228,6 +237,10 @@ public class FormRequest
         this.hasBeenTested = hasBeenTested;
         this.whereTested = whereTested;
         this.whenTested = whenTested;
+        this.hasBeenVaccinated = hasBeenVaccinated;
+        this.whenVaccinatedFirst = whenVaccinatedFirst;
+        this.whenVaccinatedSecond = whenVaccinatedSecond;
+        this.vaccineType = vaccineType;
         this.soughtMedicalAdvice = soughtMedicalAdvice;
         this.testResult = testResult;
         this.worksInHealth = Optional.ofNullable(worksInHealth).orElse(WorksInHealth.no);
@@ -339,6 +352,20 @@ public class FormRequest
     {
         positive,
         negative,
+    }
+
+    public enum HasBeenVaccinated
+    {
+        yes,
+        no,
+        declined
+    }
+
+    public enum VaccineType
+    {
+        pfizer,
+        moderna,
+        johnson_johnson
     }
 
     public enum WorksInHealth
