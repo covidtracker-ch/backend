@@ -365,7 +365,11 @@ public class FormRequest
     {
         pfizer,
         moderna,
-        johnson_johnson
+        johnson_johnson,
+        astrazeneca,
+        sputnik,
+        other,
+        unknown
     }
 
     public enum WorksInHealth
